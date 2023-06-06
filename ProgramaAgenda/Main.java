@@ -1,9 +1,8 @@
 package Vista;
 
-import Controlador.Agenda;
 import Controlador.Contacto;
-import Modelo.Conexion;
 import java.util.Scanner;
+import Modelo.*;
 
 // CASO PRÁCTICO "AGENDA DE CONTACTOS" HECHO CON PROGRAMACIÓN ESTRUCTURADA (UNIDAD 5)
 public class Main {
@@ -13,19 +12,18 @@ public class Main {
 
         // Creamos una instancia del objeto Conexion
         Conexion SQL = new Conexion();
-        // Conectamos a la BD
-        SQL.conectarMySQL();
-        
+        // Creamos una instancia del objeto Agenda
         Agenda agenda = new Agenda();
-        Conexion cnn = new Conexion();
         
+        //Conectamos con la base de datos
+        SQL.conectarMySQL();
+
         // Variables auxiliares
         int opcion;     // opcion del menú
         String n, c, t; // nombre, correo y teléfono
         String buscar;  // término a buscar
         int pos;        // posicion
         int[] vpos;     // vector de posiciones
-        Agenda agendaEncontrados; // agenda auxiliar para búsquedas
 
         // Bucle principal
         do {
@@ -37,27 +35,30 @@ public class Main {
                     break;
 
                 case 2: // Añadir contacto
+                    Contacto nuevoContacto = nuevoContacto();
+                    SQL.insertarContactoEnBD(nuevoContacto);
                     break;
 
                 case 3: // Eliminar contacto
-                    
+
                     break;
-                    
+
                 case 4: // Buscar por nombre
-                    cnn.comprobarNombre(pedirString());
+                    String cadena = pedirString();
+                    SQL.buscarPorNombreEnBD(cadena);
                     break;
-                    
+
                 case 5: // Buscar por teléfono
-                    
+
                     break;
-                    
+
                 case 6: // Buscar por correo
-                    
+
                     break;
-                    
+
                 case 7:
                     // Búsqueda global
-                    
+
                     break;
                 case 8:
                     // Salir
@@ -76,6 +77,8 @@ public class Main {
 
     /**
      * FUNCIONES DEL MENÚ Y PEDIR DATOS AL USUARIO
+     *
+     * @return
      */
     // Muestra el menú y devuelve la opción elegida por el usuario
     public static int menu() {
@@ -93,6 +96,18 @@ public class Main {
         int opcion = pedirIntEnRango(1, 8);
 
         return opcion;
+    }
+    
+    public static Contacto nuevoContacto() {
+        System.out.print("Introduce nombre y apellidos: ");
+        String fullname = pedirString();
+        System.out.print("Introduce el número de telefono: ");
+        String telephone = pedirString();
+        System.out.print("Introduce el email: ");
+        String email = pedirString();
+        
+        Contacto nuevoContacto = new Contacto(fullname, telephone, email);
+        return nuevoContacto;
     }
 
     // Pide al usuario un valor int, una y otra vez hasta que responde con valor en rango
