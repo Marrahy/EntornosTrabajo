@@ -1,42 +1,27 @@
-package Controlador;
+package Modelo;
 
-import Modelo.Conexion;
 import java.util.ArrayList;
+import Controlador.Contacto;
 
 public class Agenda {
-
-    public Agenda() {
-        
-    }
-    // Imprime la información de todos los contactos
+    
     public static void imprimirTodos() {
         ArrayList<Contacto> listadoDeContactos;
         Contacto contactoActual;
         int totalContactos;
-        // Leemos los contactos
+// Leemos los contactos
         listadoDeContactos = Conexion.leerContactosDesdeBD();
         totalContactos = listadoDeContactos.size();
-        
         if (totalContactos == 0) {
-            System.out.println("[!] Listamos todos los contactos (no encontramos ninguno)");
+            System.out.println("No hay contactos");
         } else {
-            System.out.println("[*] Listamos todos los contactos (encontramos " + totalContactos + "):");
+            System.out.println("Número de contactos: " + totalContactos);
             for (int i = 0; i < listadoDeContactos.size(); i++) {
-                // Extraemos el contacto del ArrayList
+// Extraemos el contacto del ArrayList
                 contactoActual = Conexion.leerContactosDesdeBD().get(i);
-                // Imprimimos el contacto
+// Imprimimos el contacto
                 contactoActual.imprimir();
             }
         }
     }
-    
-    public static boolean comprobarNombre(String nombre) {
-        if (Conexion.comprobarNombre(nombre)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    public static boolean 
 }
