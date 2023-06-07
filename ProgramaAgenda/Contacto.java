@@ -1,4 +1,4 @@
-package Controlador;
+package Modelo;
 
 public class Contacto {
 
@@ -6,6 +6,7 @@ public class Contacto {
     String nombre;
     String telefono;
     String correo;
+    int contactid;
 
     // Constructor
     public Contacto(String nombre, String telefono, String correo) {
@@ -15,7 +16,6 @@ public class Contacto {
     }
 
     // Getters y Setters
-    
     public String getNombre() {
         return nombre;
     }
@@ -40,11 +40,19 @@ public class Contacto {
         this.correo = correo;
     }
 
+    public int getContactId() {
+        return contactid;
+    }
+
+    public void setContactId(int contactid) {
+        this.contactid = contactid;
+    }
+
     // Devuelve un String con la información del contacto
     public String getAll() {
         return (nombre + " " + telefono + " " + correo);
     }
-    
+
     // Imprime la información del contacto
     public void imprimir() {
         System.out.println(getAll());
