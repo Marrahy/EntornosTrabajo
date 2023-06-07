@@ -1,30 +1,35 @@
 package Vista;
 
-import Controlador.Contacto;
+import Controlador.Conexion;
+import Modelo.Contacto;
 import java.util.Scanner;
 import Modelo.*;
 
 // CASO PRÁCTICO "AGENDA DE CONTACTOS" HECHO CON PROGRAMACIÓN ESTRUCTURADA (UNIDAD 5)
 public class Main {
 
+    //Creamos una instancia del objeto main para no tner que poner los metodos en staticç
+    private static final Main main = new Main();
+    // Creamos una instancia del objeto Conexion
+    public static final Conexion SQL = new Conexion();
+    // Creamos una instancia del objeto Agenda
+    public static final Agenda agenda = new Agenda();
+
+    // Variables auxiliares
+    int opcion;     // opcion del menú
+    String n, c, t; // nombre, correo y teléfono
+    String buscar;  // término a buscar
+    int pos;        // posicion
+    int[] vpos;     // vector de posiciones
+
     // MAIN PRINCIPAL
     public static void main(String[] args) {
+        main.switchCaseMenu();
+    }
 
-        // Creamos una instancia del objeto Conexion
-        Conexion SQL = new Conexion();
-        // Creamos una instancia del objeto Agenda
-        Agenda agenda = new Agenda();
-        
+    public void switchCaseMenu() {
         //Conectamos con la base de datos
         SQL.conectarMySQL();
-
-        // Variables auxiliares
-        int opcion;     // opcion del menú
-        String n, c, t; // nombre, correo y teléfono
-        String buscar;  // término a buscar
-        int pos;        // posicion
-        int[] vpos;     // vector de posiciones
-
         // Bucle principal
         do {
             opcion = menu();
@@ -36,29 +41,36 @@ public class Main {
 
                 case 2: // Añadir contacto
                     Contacto nuevoContacto = nuevoContacto();
-                    SQL.insertarContactoEnBD(nuevoContacto);
+                    agenda.agregarContacto(nuevoContacto);
                     break;
 
                 case 3: // Eliminar contacto
-
+                    agenda.imprimirTodos();
+                    int id = pedirIdContacto();
+                    agenda.eliminarContacto(id);
                     break;
 
                 case 4: // Buscar por nombre
-                    String cadena = pedirString();
-                    SQL.buscarPorNombreEnBD(cadena);
+                    System.out.print("Introduce el nombre del contacto: ");
+                    String nombre = pedirString();
+                    agenda.buscarContactoNombre(nombre);
                     break;
 
                 case 5: // Buscar por teléfono
-
+                    System.out.print("Itroduce el número del teléfono: ");
+                    String numero = pedirString();
+                    agenda.buscarContactoTelefono(numero);
                     break;
 
                 case 6: // Buscar por correo
-
+                    System.out.print("Itroduce el email: ");
+                    String email = pedirString();
+                    agenda.buscarContactoEmail(email);
                     break;
 
                 case 7:
                     // Búsqueda global
-
+                    
                     break;
                 case 8:
                     // Salir
@@ -80,7 +92,7 @@ public class Main {
      *
      * @return
      */
-    // Muestra el menú y devuelve la opción elegida por el usuario
+// Muestra el menú y devuelve la opción elegida por el usuario
     public static int menu() {
 
         System.out.println("1. Ver contactos");
@@ -97,7 +109,7 @@ public class Main {
 
         return opcion;
     }
-    
+
     public static Contacto nuevoContacto() {
         System.out.print("Introduce nombre y apellidos: ");
         String fullname = pedirString();
@@ -105,7 +117,7 @@ public class Main {
         String telephone = pedirString();
         System.out.print("Introduce el email: ");
         String email = pedirString();
-        
+
         Contacto nuevoContacto = new Contacto(fullname, telephone, email);
         return nuevoContacto;
     }
@@ -132,5 +144,11 @@ public class Main {
         Scanner in = new Scanner(System.in);
         return in.nextLine();
     }
-
+    
+    public static int pedirIdContacto() {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Introduce el ID de contacto: ");
+        int id = in.nextInt();
+        return id;
+    }
 }
